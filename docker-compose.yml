@@ -1,0 +1,21 @@
+services:
+  postgres:
+    restart: always
+    image: postgres:16
+    container_name: postgres_demo
+    volumes:
+      - ${HOST_DIR}:/var/lib/postgresql/data
+      - ${INIT_SCHEMA}:/docker-entrypoint-initdb.d/
+    expose:
+      - 5432
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1k"
+        max-file: "3"
