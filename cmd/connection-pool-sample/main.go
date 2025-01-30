@@ -32,7 +32,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error starting transaction: %v", err)
 	}
-	defer tx.Rollback(context.Background())
+	defer func() {
+		err := tx.Rollback(context.Background())
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	_, err = tx.Exec(context.Background(), `
 		INSERT INTO authors (name, email)
